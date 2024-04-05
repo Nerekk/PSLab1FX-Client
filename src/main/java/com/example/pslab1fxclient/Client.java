@@ -24,8 +24,8 @@ public class Client {
         output.writeUTF(message);
         String echo = input.readUTF();
 
-        c.sendAlert("Message: " + message + " sent");
-        c.sendAlert("Server echo: " + echo);
+        c.sendAlert("Message sent [" + message.getBytes().length + " bytes]: " + message);
+        c.sendAlert("Server echo [" + echo.getBytes().length + " bytes]: " + echo);
     }
 
     public void disconnect() throws IOException {
