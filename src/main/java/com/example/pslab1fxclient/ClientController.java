@@ -1,5 +1,6 @@
 package com.example.pslab1fxclient;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -39,6 +40,10 @@ public class ClientController implements Initializable {
     @FXML
     private Button bDisconnect;
 
+    public final static int INFO = 0;
+    public final static int ECHO = 1;
+    public final static int ERROR = 2;
+
     private Client client;
 
     @Override
@@ -49,25 +54,27 @@ public class ClientController implements Initializable {
     @FXML
     protected void connect() {
         String ip = getIp();
-        if (ip.isEmpty()) {
-            sendAlert("Given ip is in wrong format!");
+        if (ip == null) {
+            sendAlert(ERROR, "Given ip is in wrong format!");
             return;
         }
         Integer port = getPort();
         if (port == -1) {
-            sendAlert("Given port is not a number!");
+            sendAlert(ERROR, "Given port is not a number!");
             return;
         }
+
         try {
+            sendAlert(INFO, "Trying to connect..");
             client.connect(ip, port);
         } catch (UnknownHostException e) {
-            sendAlert("Unknown Host");
+            sendAlert(ERROR, "Unknown Host");
             return;
         } catch (IOException e) {
-            sendAlert("Cannot connect to this server");
+            sendAlert(ERROR, "Cannot connect to this server");
             return;
         }
-        sendAlert("Connected");
+        sendAlert(INFO, "Connected");
         switchButtonsLock();
     }
 
@@ -76,10 +83,10 @@ public class ClientController implements Initializable {
         try {
             client.disconnect();
         } catch (IOException e) {
-            sendAlert("IOException [disconnect]");
+            sendAlert(ERROR, "IOException [disconnect]");
             return;
         }
-        sendAlert("Disconnected");
+        sendAlert(INFO, "Disconnected");
         switchButtonsLock();
     }
 
@@ -88,7 +95,7 @@ public class ClientController implements Initializable {
         try {
             client.echo(getMessage());
         } catch (IOException e) {
-            sendAlert("Server connection lost");
+            sendAlert(ERROR, "Server connection lost");
             disconnect();
         }
     }
@@ -102,7 +109,7 @@ public class ClientController implements Initializable {
         if (matcher.matches() || ip.equals("localhost")) {
             return ip;
         } else {
-            return "";
+            return null;
         }
     }
 
@@ -131,17 +138,25 @@ public class ClientController implements Initializable {
         }
     }
 
-    public void sendAlert(String alert) {
+    public void sendAlert(int type, String alert) {
         LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String currentTimeString = "[" + currentTime.format(formatter) + "]";
         String sta = clientTextArea.getText();
+
+        switch (type) {
+            case INFO -> alert = "[INFO] " + alert;
+            case ECHO -> alert = "[ECHO] " + alert;
+            case ERROR -> alert = "[ERROR] " + alert;
+        }
+
         String info;
         if (sta.isEmpty()) {
             info = currentTimeString + " " + alert;
         } else {
             info = "\n" + currentTimeString + " " + alert;
         }
+
         clientTextArea.appendText(info);
     }
 }

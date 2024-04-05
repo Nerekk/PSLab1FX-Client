@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import static com.example.pslab1fxclient.ClientController.ECHO;
+
 public class Client {
     private Socket socket;
     private DataOutputStream output;
     private DataInputStream input;
-    private ClientController c;
+    private final ClientController c;
 
     public Client(ClientController c) { this.c = c; }
 
@@ -24,8 +26,8 @@ public class Client {
         output.writeUTF(message);
         String echo = input.readUTF();
 
-        c.sendAlert("Message sent [" + message.getBytes().length + " bytes]: " + message);
-        c.sendAlert("Server echo [" + echo.getBytes().length + " bytes]: " + echo);
+        c.sendAlert(ECHO, "Message sent [" + message.getBytes().length + " bytes]: " + message);
+        c.sendAlert(ECHO, "Server echo [" + echo.getBytes().length + " bytes]: " + echo);
     }
 
     public void disconnect() throws IOException {
