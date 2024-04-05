@@ -42,6 +42,18 @@ public class ClientController implements Initializable {
 
     }
 
+    public String getIp () { return tServerIp.getText(); }
+
+    public Integer getPort() {
+        Integer port;
+        try {
+            port = Integer.parseInt(tServerPort.getText());
+        } catch (NumberFormatException e) {
+            sendAlert("Given port is not number!");
+            return -1;
+        }
+        return port;
+    }
     public String getMessage() {
         return tMessage.getText();
     }
