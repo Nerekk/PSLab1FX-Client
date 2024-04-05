@@ -7,7 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -42,6 +44,52 @@ public class ClientController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         client = new Client(this);
+    }
+
+    @FXML
+    protected void connect() {
+        String ip = getIp();
+        if (ip.isEmpty()) {
+            sendAlert("Given ip is in wrong format!");
+            return;
+        }
+        Integer port = getPort();
+        if (port == -1) {
+            sendAlert("Given port is not a number!");
+            return;
+        }
+        try {
+            client.connect(ip, port);
+        } catch (UnknownHostException e) {
+            sendAlert("Unknown Host");
+            return;
+        } catch (IOException e) {
+            sendAlert("Cannot connect to this server");
+            return;
+        }
+        sendAlert("Connected");
+        switchButtonsLock();
+    }
+
+    @FXML
+    protected void disconnect() {
+        try {
+            client.disconnect();
+        } catch (IOException e) {
+            sendAlert("IOException [disconnect]");
+            return;
+        }
+        sendAlert("Disconnected");
+        switchButtonsLock();
+    }
+
+    @FXML
+    protected void send() {
+        try {
+            client.echo(tMessage.getText());
+        } catch (IOException e) {
+            sendAlert("IOException [echo]");
+        }
     }
 
     public String getIp () {
