@@ -11,6 +11,8 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ClientController implements Initializable {
 
@@ -39,17 +41,27 @@ public class ClientController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        client = new Client(this);
     }
 
-    public String getIp () { return tServerIp.getText(); }
+    public String getIp () {
+        String ipPattern = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+        String ip = tServerIp.getText();
+        Pattern pattern = Pattern.compile(ipPattern);
+        Matcher matcher = pattern.matcher(ip);
+
+        if (matcher.matches() || ip.equals("localhost")) {
+            return ip;
+        } else {
+            return "";
+        }
+    }
 
     public Integer getPort() {
         Integer port;
         try {
             port = Integer.parseInt(tServerPort.getText());
         } catch (NumberFormatException e) {
-            sendAlert("Given port is not number!");
             return -1;
         }
         return port;
