@@ -86,9 +86,10 @@ public class ClientController implements Initializable {
     @FXML
     protected void send() {
         try {
-            client.echo(tMessage.getText());
+            client.echo(getMessage());
         } catch (IOException e) {
-            sendAlert("IOException [echo]");
+            sendAlert("Server connection lost");
+            disconnect();
         }
     }
 

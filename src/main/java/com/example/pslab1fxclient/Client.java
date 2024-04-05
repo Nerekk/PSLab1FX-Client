@@ -22,8 +22,9 @@ public class Client {
 
     public void echo(String message) throws IOException {
         output.writeUTF(message);
-        c.sendAlert("Message: " + message + " sent");
         String echo = input.readUTF();
+
+        c.sendAlert("Message: " + message + " sent");
         c.sendAlert("Server echo: " + echo);
     }
 
