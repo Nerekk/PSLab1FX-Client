@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.pslab1fxclient.ClientController">
    <children>
-      <TextField fx:id="tServerPort" layoutX="491.0" layoutY="27.0" prefHeight="25.0" prefWidth="75.0" text="80" />
+      <TextField fx:id="tServerPort" layoutX="491.0" layoutY="27.0" prefHeight="25.0" prefWidth="75.0" text="7" />
       <TextArea fx:id="clientTextArea" editable="false" layoutX="34.0" layoutY="134.0" prefHeight="225.0" prefWidth="532.0" />
       <Label layoutX="506.0" layoutY="7.0" text="TCP Port" />
       <Label layoutX="35.0" layoutY="101.0" text="Client logs">

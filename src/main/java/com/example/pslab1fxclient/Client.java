@@ -31,6 +31,10 @@ public class Client {
     }
 
     public void disconnect() throws IOException {
-        if (socket != null) socket.close();
+        if (socket != null) {
+            socket.close();
+            input.close();
+            output.close();
+        }
     }
 }
